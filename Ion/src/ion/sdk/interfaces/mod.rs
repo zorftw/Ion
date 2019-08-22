@@ -15,9 +15,11 @@ pub fn capture_interface(module: HMODULE, interface: *const u8) -> *const c_void
 
         let interface_addr = fn_capture_interface(interface as _, std::ptr::null_mut());
 
-        println!("[capture_interface] captured {} at 0x{:X}", std::ffi::CStr::from_ptr(interface as _).to_str().unwrap(), interface_addr as usize);
+        if !interface_addr.is_null() {
+            println!("[capture_interface] captured {} at 0x{:X}", std::ffi::CStr::from_ptr(interface as _).to_str().unwrap(), interface_addr as usize);
 
-        return interface_addr;
+            return interface_addr;
+        }
     }
     std::ptr::null_mut()
 }

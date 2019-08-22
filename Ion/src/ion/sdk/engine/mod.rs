@@ -3,6 +3,8 @@ use std::mem::transmute;
 type get_screen_size_fn = unsafe extern "thiscall" fn(thisptr: *mut usize, width: &mut i32, height: &mut i32);
 type get_local_player_fn = unsafe extern "thiscall" fn(thisptr: *mut usize) -> i32;
 
+type execute_cmd_fn = unsafe extern "thiscall" fn(thisptr: *mut usize, cmd: *const u8);
+
 type returns_bool = unsafe extern "thiscall" fn(thisptr: *mut usize) -> bool;
 
 
@@ -35,6 +37,12 @@ impl Engine {
     pub fn get_local_player(&self) -> i32 {
         unsafe {
             transmute::<_, get_local_player_fn>(utils::native::get_virtual_function(self.base, 12))(self.base)
+        }
+    }
+
+    pub fn execute_client_cmd(&self, cmd: *const u8) {
+        unsafe {
+            transmute::<_, execute_cmd_fn>(utils::native::get_virtual_function(self.base, 108))(self.base, cmd);
         }
     }
 }

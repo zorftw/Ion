@@ -9,6 +9,7 @@ use crate::ion::*;
 
 use std::os::raw::{c_float, c_void};
 use crate::ion::sdk::surface::Color;
+use crate::ion::sdk::get_local_player;
 
 type createmove_t    = unsafe extern "fastcall" fn(ecx: *const c_void, edx: *const c_void, _sampleframetime: c_float, *const sdk::definitions::cusercmd::CUserCmd) -> bool;
 type fsn_t           = unsafe extern "fastcall" fn(ecx: *const c_void, edx: *const c_void, stage: i32);
@@ -37,9 +38,8 @@ unsafe extern "fastcall" fn create_move(ecx: *const c_void, edx: *const c_void, 
         return std::mem::transmute::<_, createmove_t>(hooks.lock().unwrap()[0].get_original(24))(ecx, edx, _sampleframetime, cmd);
     }
 
-    println!("{}", interfaces.lock().unwrap().entity_list.get_highest_ent_idx());
-
-    interfaces.lock().unwrap().entity_list.get_entity_by_id(interfaces.lock().unwrap().entity_list.get_highest_ent_idx());
+    let local = get_local_player();
+    println!("position = {:?}", local.get_origin());
 
     false
 }
@@ -87,6 +87,6 @@ unsafe extern "fastcall" fn paint_traverse(exc: *const c_void, edx: *const c_voi
     // Top panel, so that we can draw :)
     if PANEL_ID == panel {
         interfaces.lock().unwrap().vgui_surface.set_draw_color(Color::new_rgb(255, 0,0));
-        interfaces.lock().unwrap().vgui_surface.draw_filled_rect(0, 0, 100, 100);
+        interfaces.lock().unwrap().vgui_surface.draw_filled_rect(0, 0, 50, 100);
     }
 }

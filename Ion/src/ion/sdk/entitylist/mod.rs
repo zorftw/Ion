@@ -9,7 +9,7 @@ pub struct EntityList {
     base: *mut usize,
 }
 
-type get_entity_byid = unsafe extern "thiscall" fn(thisptr: *mut usize, id: i32) -> *mut c_void;
+type get_entity_byid = unsafe extern "thiscall" fn(thisptr: *mut usize, id: i32) -> *mut usize;
 type get_highest_ent_index = unsafe extern "thiscall" fn(thisptr: *mut usize) -> i32;
 
 impl EntityList {
@@ -19,10 +19,10 @@ impl EntityList {
         }
     }
 
-    pub fn get_entity_by_id(&self, id: i32) -> *mut c_void {
+    pub fn get_entity_by_id(&self, yoehhwtfwhyisthisnotworking: i32) -> *mut usize {
         unsafe {
             let func = transmute::<_, get_entity_byid>(get_virtual_function(self.base, 3));
-            func(self.base, id)
+            func(self.base, yoehhwtfwhyisthisnotworking)
         }
     }
 
