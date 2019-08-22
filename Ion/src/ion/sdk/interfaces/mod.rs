@@ -28,7 +28,7 @@ pub struct Interfaces {
     pub client_mode: *mut usize,
     pub vgui_surface: sdk::surface::Surface,
     pub vgui_panel: sdk::panel::Panel,
-    pub entity_list: *mut usize,
+    pub entity_list: sdk::entitylist::EntityList,
     pub engine: sdk::engine::Engine,
     pub glow_object_manager: *const sdk::glow::glow_object_manager_t,
 }
@@ -41,7 +41,7 @@ impl Default for Interfaces {
             engine: sdk::engine::Engine::default(),
             glow_object_manager: std::ptr::null_mut(),
             vgui_panel: sdk::panel::Panel::default(),
-            entity_list: std::ptr::null_mut(),
+            entity_list: sdk::entitylist::EntityList::default(),
             vgui_surface: sdk::surface::Surface::default(),
         }
     }

@@ -5,19 +5,21 @@ use std::ops::Add;
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct Vec3 {
-    x: c_float,
-    y: c_float,
-    z: c_float,
+    pub x: c_float,
+    pub y: c_float,
+    pub z: c_float,
 }
 
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct Vec2 {
-    yaw: c_float,
-    pitch: c_float,
+    pub yaw: c_float,
+    pub pitch: c_float,
 }
 
-impl Add for Vec3 {
+use std::ops;
+
+impl ops::Add<Vec3> for Vec3 {
     type Output = Self;
 
     fn add(mut self, rhs: Self) -> Self::Output {
@@ -25,5 +27,30 @@ impl Add for Vec3 {
         self.y += rhs.y;
         self.z += rhs.z;
         self
+    }
+}
+
+impl ops::Sub<Vec3> for Vec3 {
+    type Output = Self;
+
+    fn sub(mut self, rhs: Vec3) -> Self::Output {
+        self.x -= rhs.x;
+        self.y -= rhs.y;
+        self.z -= rhs.z;
+        self
+    }
+}
+
+impl Vec3 {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
+        Self {
+            x, y, z,
+        }
+    }
+
+    pub fn empty() -> Self {
+        Self {
+            x: 0 as f32, y: 0 as f32, z: 0 as f32,
+        }
     }
 }

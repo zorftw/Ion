@@ -1,4 +1,5 @@
 #![feature(abi_thiscall)]
+#![feature(core_intrinsics)]
 
 /// Hello there, you're probably wonder how I got in this situation?
 /// /s either way to allow the use of thiscall we need to have the nightly rust build (angery face)

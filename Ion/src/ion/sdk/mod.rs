@@ -7,6 +7,7 @@ pub mod glow;
 pub mod engine;
 pub mod surface;
 pub mod panel;
+pub mod entitylist;
 
 pub mod interfaces;
 pub mod definitions;

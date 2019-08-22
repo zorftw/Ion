@@ -36,11 +36,6 @@ pub fn start() {
         let vgui_surface = sdk::interfaces::capture_interface(vgui_factory, b"VGUI_Surface031\0".as_ptr()) as *mut usize;
         let glow_object_manager: *const sdk::glow::glow_object_manager_t = *(res as *mut *mut usize) as _;
 
-       //**reinterpret_cast< i_client_mode*** >( ( *(uintptr_t**)( client ) )[10] + 5 );
-        //let a = *(*(client as *mut *mut usize).offset(10)).offset(5);
-        //let b: *mut usize = **(a as *mut *mut _);
-        //let fuck: *mut usize = **( (*((*(client as *mut *mut usize)).offset(10) ) + 5) as *mut *mut *mut usize);
-
         let client_as_array = client as *mut *mut usize;
         let tenth_index = (*client_as_array).offset(10);
         let plus_five = (*tenth_index) + 5;
@@ -51,13 +46,10 @@ pub fn start() {
         interfaces.lock().unwrap().engine = sdk::engine::Engine::from_raw(engine);
         interfaces.lock().unwrap().vgui_panel = sdk::panel::Panel::from_raw(vgui_panel);
         interfaces.lock().unwrap().vgui_surface = sdk::surface::Surface::from_raw(vgui_surface);
-        interfaces.lock().unwrap().entity_list = entity_list;
+        interfaces.lock().unwrap().entity_list = sdk::entitylist::EntityList::from_raw(entity_list);
         interfaces.lock().unwrap().glow_object_manager = glow_object_manager;
 
         println!("{:?}", interfaces.lock().unwrap());
-
-        let mut width: i32 = 0;
-        let mut height: i32 = 0;
 
         sdk::hook::hook();
 
