@@ -8,7 +8,7 @@ use crate::utils::math;
 
 #[derive(Clone)]
 #[repr(C)]
-pub struct CUserCmd {
+pub struct c_usercmd {
     pub destructor: *const *const fn(),
     pub command_number: i32,
     pub tick_count: i32,

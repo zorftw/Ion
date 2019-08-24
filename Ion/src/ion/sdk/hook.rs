@@ -11,7 +11,7 @@ use std::os::raw::{c_float, c_void};
 use crate::ion::sdk::surface::Color;
 use crate::ion::sdk::get_local_player;
 
-type createmove_t    = unsafe extern "fastcall" fn(ecx: *const c_void, edx: *const c_void, _sampleframetime: c_float, *const sdk::definitions::cusercmd::CUserCmd) -> bool;
+type createmove_t    = unsafe extern "fastcall" fn(ecx: *const c_void, edx: *const c_void, _sampleframetime: c_float, *const sdk::definitions::cusercmd::c_usercmd) -> bool;
 type fsn_t           = unsafe extern "fastcall" fn(ecx: *const c_void, edx: *const c_void, stage: i32);
 type painttraverse_t = unsafe extern "fastcall" fn(exc: *const c_void, edx: *const c_void, panel: u32, force_repaint: bool, allow_force: bool);
 
@@ -19,7 +19,7 @@ pub fn hook() {
     let add_vmt = |vmt: VMT| { hooks.lock().unwrap().push(vmt); };
 
     let mut client_mode_vmt = VMT::new(interfaces.lock().unwrap().client_mode);
-    let mut client_vmt      = VMT::new(interfaces.lock().unwrap().client);
+    let mut client_vmt      = VMT::new(interfaces.lock().unwrap().client.base);
     let mut panel_vmt       = VMT::new(interfaces.lock().unwrap().vgui_panel.base);
 
     client_mode_vmt.hook(24, create_move as _);
@@ -31,7 +31,7 @@ pub fn hook() {
     add_vmt(panel_vmt);
 }
 
-unsafe extern "fastcall" fn create_move(ecx: *const c_void, edx: *const c_void, _sampleframetime: c_float, cmd: *const sdk::definitions::cusercmd::CUserCmd) -> bool {
+unsafe extern "fastcall" fn create_move(ecx: *const c_void, edx: *const c_void, _sampleframetime: c_float, cmd: *const sdk::definitions::cusercmd::c_usercmd) -> bool {
 
     if cmd.is_null() || cmd.read().command_number == 0 || !interfaces.lock().unwrap().engine.is_ingame()
         || !interfaces.lock().unwrap().engine.is_connected() {
@@ -39,8 +39,7 @@ unsafe extern "fastcall" fn create_move(ecx: *const c_void, edx: *const c_void, 
     }
 
     let local = get_local_player();
-    println!("position = {:?}", local.get_origin());
-
+   // println!("position: {:?}", local.get_origin());
     false
 }
 

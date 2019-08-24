@@ -26,7 +26,7 @@ pub fn capture_interface(module: HMODULE, interface: *const u8) -> *const c_void
 
 #[derive(Debug)]
 pub struct Interfaces {
-    pub client: *mut usize,
+    pub client: sdk::client::Client,
     pub client_mode: *mut usize,
     pub vgui_surface: sdk::surface::Surface,
     pub vgui_panel: sdk::panel::Panel,
@@ -38,7 +38,7 @@ pub struct Interfaces {
 impl Default for Interfaces {
     fn default() -> Self {
         Self {
-            client: std::ptr::null_mut(),
+            client: sdk::client::Client::default(),
             client_mode: std::ptr::null_mut(),
             engine: sdk::engine::Engine::default(),
             glow_object_manager: std::ptr::null_mut(),

@@ -36,12 +36,10 @@ pub fn start() {
         let vgui_surface = sdk::interfaces::capture_interface(vgui_factory, b"VGUI_Surface031\0".as_ptr()) as *mut usize;
         let glow_object_manager: *const sdk::glow::glow_object_manager_t = *(res as *mut *mut usize) as _;
 
-        let client_as_array = client as *mut *mut usize;
-        let tenth_index = (*client_as_array).offset(10);
-        let plus_five = (*tenth_index) + 5;
-        let client_mode = **(plus_five as *mut *mut *mut usize);
+        /* yikes */
+        let client_mode = **(((*((*(client as *mut *mut usize)).offset(10))) + 5) as *mut *mut *mut usize);
 
-        interfaces.lock().unwrap().client = client;
+        interfaces.lock().unwrap().client = sdk::client::Client::from_raw(client);
         interfaces.lock().unwrap().client_mode = client_mode;
         interfaces.lock().unwrap().engine = sdk::engine::Engine::from_raw(engine);
         interfaces.lock().unwrap().vgui_panel = sdk::panel::Panel::from_raw(vgui_panel);
@@ -52,6 +50,10 @@ pub fn start() {
         println!("{:?}", interfaces.lock().unwrap());
 
         sdk::hook::hook();
+
+        sdk::netvar::initialize();
+
+        println!("{:X}", sdk::netvar::get_offset("DT_BasePlayer", "m_iTeamNum"));
 
         loop {
             std::thread::sleep(std::time::Duration::from_secs(5));
